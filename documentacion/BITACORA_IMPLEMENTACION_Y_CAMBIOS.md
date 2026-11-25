@@ -50,3 +50,14 @@ En esta primera entrega de frontend se estructuró:
 - **Capa superior de difuminado verde (`#10B981`, 40%)** con desenfoque descendente progresivo en capa alta.
 - **Pantalla Mapa** con el mapa real de Calz. del Tecnológico (UABC), barra flotante de ruta editable, marcadores interactivos y **Half Sheet en Liquid Glass** con campo de texto de filtrado, carrusel de rutas, carrusel de unidades próximas, semáforo en vivo reactivo a la unidad seleccionada y botón de solicitud de parada.
 - **Pantallas secundarias (`Parada IoT`, `Mi Pase`, `Alertas`)** habilitadas en la navegación con placeholders descriptivos listos para la siguiente fase de componentes e integración MQTT/REST.
+
+---
+
+## 5. Mapa en tiempo real multi-ciudad y simulación vehicular (`v0.2.0`)
+
+Para permitir pruebas en tiempo real tanto en **Tijuana, Baja California** como en **Guanajuato, Guanajuato**, se sustituyó la imagen estática inicial del mapa por una capa cartográfica viva basada en **Leaflet** y **OpenStreetMap**:
+
+- **Perfiles por ciudad (`src/data/cityProfiles.ts`):** Define las coordenadas de centro, parada principal, polilínea de corredor vial, rutas rápidas y flota inicial para `tijuana` (`Parada P14 · Calz. del Tecnológico`) y `guanajuato` (`Parada P08 · Centro · Teatro Juárez`), además de funciones de distancia geodésica (`haversineMeters`, `detectClosestCity`).
+- **Geolocalización con fallback (`src/hooks/useCityLocation.ts`):** Solicita la ubicación del navegador vía `navigator.geolocation`, selecciona automáticamente la ciudad más cercana y muestra el marcador pulsante de posición del usuario cuando hay permiso; en caso contrario o durante pruebas locales por HTTP, permite cambiar manualmente entre **Tijuana**, **Guanajuato** y reintento **📍 GPS** desde píldoras Liquid Glass en la parte superior del mapa, junto con un botón de recentrado (`⌖`).
+- **Motor de unidades simuladas (`src/hooks/useSimulatedUnits.ts`):** Interpola de manera continua cada `1200 ms` la coordenada de cada camión y taxi sobre la polilínea de la ciudad activa, actualizando dinámicamente los marcadores del mapa, las tarjetas del Half Sheet (distancia en metros y minutos estimados de llegada) y el componente `SEMÁFORO EN VIVO`.
+- **Ajustes visuales Liquid Glass (`src/App.css`):** Integración de los controles de Leaflet sin marca de agua comercial, filtro suave de mosaicos OSM para armonizar con los desenfoques translúcidos y ajuste de altura del Half Sheet (`59%`) para mantener visible el botón de solicitud de parada por encima de la barra de pestañas inferior.

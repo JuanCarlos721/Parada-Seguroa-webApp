@@ -1,19 +1,36 @@
-import { useMemo, useState } from 'react'
-import uabcMapImg from '../assets/uabc-map.png'
+import { useEffect, useMemo, useState } from 'react'
 import iconSearch from '../assets/icon-search.svg'
-import { ROUTE_FILTERS, TRANSIT_UNITS, type TransitUnit } from '../data/mockTransit'
+import { CITY_PROFILES } from '../data/cityProfiles'
+import { useCityLocation } from '../hooks/useCityLocation'
+import { useSimulatedUnits, type SimulatedUnit } from '../hooks/useSimulatedUnits'
+import { LiveMapCanvas } from './LiveMapCanvas'
 
 export function MapScreen() {
-  const [routeInput, setRouteInput] = useState('Ruta: Postal/TEC/UABC → Centro')
+  const { cityId, userCoords, geoStatus, manualOverride, selectCity, requestGps } =
+    useCityLocation('tijuana')
+  const profile = CITY_PROFILES[cityId]
+  const simulatedUnits = useSimulatedUnits(profile)
+
+  const [routeInput, setRouteInput] = useState(profile.defaultRouteTitle)
   const [sheetQuery, setSheetQuery] = useState('')
   const [activeChip, setActiveChip] = useState('all')
-  const [selectedUnitId, setSelectedUnitId] = useState('u-111')
+  const [selectedUnitId, setSelectedUnitId] = useState(profile.units[1]?.id ?? profile.units[0].id)
   const [isSheetExpanded, setIsSheetExpanded] = useState(false)
   const [stopRequested, setStopRequested] = useState(false)
+  const [recenterSignal, setRecenterSignal] = useState(0)
+
+  // Sincroniza textos y selección cuando cambia la ciudad activa
+  useEffect(() => {
+    setRouteInput(profile.defaultRouteTitle)
+    setActiveChip('all')
+    setSheetQuery('')
+    setStopRequested(false)
+    setSelectedUnitId(profile.units[1]?.id ?? profile.units[0].id)
+  }, [profile])
 
   const filteredUnits = useMemo(() => {
     const q = sheetQuery.trim().toLowerCase()
-    return TRANSIT_UNITS.filter((unit) => {
+    return simulatedUnits.filter((unit) => {
       const matchesChip = activeChip === 'all' || unit.routeKey === activeChip
       const matchesQuery =
         q.length === 0 ||
@@ -22,10 +39,10 @@ export function MapScreen() {
         unit.driver.toLowerCase().includes(q)
       return matchesChip && matchesQuery
     })
-  }, [activeChip, sheetQuery])
+  }, [activeChip, sheetQuery, simulatedUnits])
 
-  const highlightedUnit: TransitUnit =
-    TRANSIT_UNITS.find((u) => u.id === selectedUnitId) ?? TRANSIT_UNITS[1]
+  const highlightedUnit: SimulatedUnit =
+    simulatedUnits.find((u) => u.id === selectedUnitId) ?? simulatedUnits[0]
 
   return (
     <main className="map-screen">
@@ -43,65 +60,64 @@ export function MapScreen() {
                 aria-label="Ruta actual"
                 placeholder="Buscar ruta o destino..."
               />
-              <div className="route-subtitle">Calz. del Tecnológico · Parada P14</div>
+              <div className="route-subtitle">{profile.stopSubtitle}</div>
             </div>
           </div>
-          <span className="live-badge">En vivo</span>
+          <span className="live-badge">Simulado · En vivo</span>
+        </div>
+
+        {/* Selector de ciudad (TJ / GTO) + estado GPS en Liquid Glass */}
+        <div className="city-controls-row">
+          <div className="city-switcher-pill" role="group" aria-label="Seleccionar ciudad">
+            <button
+              type="button"
+              className={`city-pill-btn ${cityId === 'tijuana' ? 'active' : ''}`}
+              onClick={() => selectCity('tijuana')}
+            >
+              Tijuana
+            </button>
+            <button
+              type="button"
+              className={`city-pill-btn ${cityId === 'guanajuato' ? 'active' : ''}`}
+              onClick={() => selectCity('guanajuato')}
+            >
+              Guanajuato
+            </button>
+            <button
+              type="button"
+              className={`city-pill-btn ${!manualOverride && geoStatus === 'active' ? 'active-gps' : ''}`}
+              onClick={() => {
+                requestGps()
+                setRecenterSignal((n) => n + 1)
+              }}
+              title="Detectar mi ciudad por GPS"
+            >
+              {geoStatus === 'active' ? '📍 GPS' : geoStatus === 'detecting' ? 'GPS…' : '📍 Auto'}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="recenter-glass-btn"
+            onClick={() => setRecenterSignal((n) => n + 1)}
+            aria-label="Centrar mapa en parada"
+            title="Centrar mapa"
+          >
+            ⌖
+          </button>
         </div>
       </div>
 
-      {/* Mapa real UABC / Calz. del Tecnológico con trazado de ruta y pines */}
+      {/* Mapa real interactivo multi-ciudad con Leaflet */}
       <div className="map-viewport">
-        <div className="map-scene">
-          <img src={uabcMapImg} className="map-base-img" alt="Mapa de rutas UABC Tijuana" />
-
-          <svg
-            className="map-route-svg"
-            viewBox="0 0 1000 562.5"
-            fill="none"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M365 322 L540 309 L652 329 L756 341 L860 300"
-              stroke="#007AFF"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          {/* Pin Parada P14 */}
-          <div className="map-stop-pin" style={{ left: '57.2%', top: '56.2%' }}>
-            <div className="stop-pill">P14 Calz. del Tec.</div>
-            <div className="stop-dot" />
-          </div>
-
-          {/* Marcador Taxi #U-91 */}
-          <button
-            type="button"
-            className="map-unit-marker"
-            style={{ left: '62.5%', top: '57.6%' }}
-            onClick={() => setSelectedUnitId('u-91')}
-            aria-label="Seleccionar Taxi U-91"
-          >
-            <span className="unit-map-dot red" />
-            <span className="unit-callout red">
-              <span className="callout-dot red" />
-              <span>Taxi #U-91 · 1 min</span>
-            </span>
-          </button>
-
-          {/* Marcador punto naranja derecho */}
-          <button
-            type="button"
-            className="map-unit-marker"
-            style={{ left: '75.5%', top: '60.5%' }}
-            onClick={() => setSelectedUnitId('u-111')}
-            aria-label="Seleccionar Taxi U-111"
-          >
-            <span className="unit-map-dot yellow" />
-          </button>
-        </div>
+        <LiveMapCanvas
+          profile={profile}
+          units={filteredUnits}
+          selectedUnitId={highlightedUnit.id}
+          userCoords={userCoords}
+          recenterSignal={recenterSignal}
+          onSelectUnit={setSelectedUnitId}
+        />
       </div>
 
       {/* Half Sheet en Liquid Glass */}
@@ -143,7 +159,7 @@ export function MapScreen() {
 
         {/* Carrusel de botones de rutas */}
         <div className="routes-carousel" role="group" aria-label="Filtro de rutas">
-          {ROUTE_FILTERS.map((chip) => (
+          {profile.filters.map((chip) => (
             <button
               key={chip.id}
               type="button"
@@ -156,7 +172,7 @@ export function MapScreen() {
         </div>
 
         <div className="section-uppercase-label">
-          <span>Unidades próximas</span>
+          <span>Unidades próximas · {profile.shortCode}</span>
           <span style={{ color: '#007aff' }}>
             {filteredUnits.length} {filteredUnits.length === 1 ? 'unidad' : 'unidades'}
           </span>
@@ -235,8 +251,8 @@ export function MapScreen() {
           onClick={() => setStopRequested((prev) => !prev)}
         >
           {stopRequested
-            ? '✓ Parada solicitada en P14 (Tocar para cancelar)'
-            : 'Solicitar parada en P14 Calz. del Tec.'}
+            ? `✓ Parada solicitada en ${profile.stopName} (Tocar para cancelar)`
+            : `Solicitar parada en ${profile.stopName}`}
         </button>
       </section>
     </main>

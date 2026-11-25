@@ -83,37 +83,164 @@
 .map-viewport {
   position: relative;
   width: 100%;
-  height: 55%;
+  height: 100%;
   overflow: hidden;
 }
 
-.map-scene {
-  position: absolute;
-  width: 1040px;
-  height: 585px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-61%, -47%);
-  user-select: none;
-}
-
-.map-base-img {
+.live-leaflet-map {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
+  z-index: 1;
+  background: #edf2f7;
+}
+
+.live-leaflet-map .leaflet-tile-pane {
+  filter: saturate(0.78) contrast(0.92) brightness(1.06);
+}
+
+.live-leaflet-map .leaflet-control-attribution {
+  font-size: 9px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 6px;
+  padding: 1px 5px;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+.leaflet-custom-icon {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-stop-pin {
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
   pointer-events: none;
 }
 
-.map-route-svg {
+.leaflet-unit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.unit-map-dot.pulse-ring {
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.28), 0 2px 8px rgba(15, 23, 42, 0.35);
+}
+
+.unit-callout.is-selected {
+  box-shadow: 0 8px 18px rgba(0, 122, 255, 0.22);
+}
+
+/* Marcador GPS real del usuario */
+.user-gps-marker {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-gps-halo {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(0, 122, 255, 0.25);
+  animation: gpsPulse 2s ease-out infinite;
+}
+
+.user-gps-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #007aff;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 122, 255, 0.5);
+}
+
+@keyframes gpsPulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+/* Selector de ciudad y botón centrar en Liquid Glass */
+.city-controls-row {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.city-switcher-pill {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(18px) saturate(185%);
+  -webkit-backdrop-filter: blur(18px) saturate(185%);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.city-pill-btn {
+  border: none;
+  background: transparent;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.city-pill-btn.active {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.city-pill-btn.active-gps {
+  background: #007aff;
+  color: #ffffff;
+}
+
+.recenter-glass-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(18px) saturate(185%);
+  -webkit-backdrop-filter: blur(18px) saturate(185%);
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
 /* Pines y callouts sobre el mapa */
+/* pin azul amrino del usuario */
 .map-stop-pin {
   position: absolute;
   transform: translate(-50%, -100%);
@@ -167,6 +294,7 @@
   flex-shrink: 0;
 }
 
+/* Colores para los marcadores de las unidades */
 .unit-map-dot.green {
   background: #10b981;
 }
@@ -228,7 +356,7 @@
 /* Barra superior flotante en Liquid Glass */
 .floating-route-bar-wrap {
   position: absolute;
-  top: calc(18px + env(safe-area-inset-top, 0px));
+  top: calc(50px + env(safe-area-inset-top, 0px));
   left: 14px;
   right: 14px;
   z-index: 45;
@@ -240,7 +368,7 @@
   -webkit-backdrop-filter: blur(20px) saturate(185%);
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 16px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -301,10 +429,10 @@
   -webkit-backdrop-filter: blur(26px) saturate(190%);
   border-top: 1.5px solid rgba(255, 255, 255, 0.88);
   border-radius: 28px 28px 0 0;
-  padding: 8px 16px calc(88px + env(safe-area-inset-bottom, 0px)) 16px;
+  padding: 8px 16px calc(86px + env(safe-area-inset-bottom, 0px)) 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
   box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transition: height 280ms cubic-bezier(0.22, 1, 0.36, 1);
   overflow-y: auto;
@@ -393,7 +521,7 @@
 .routes-carousel::-webkit-scrollbar {
   display: none;
 }
-
+/* chip sin seleccionar */
 .route-chip {
   flex-shrink: 0;
   height: 30px;
@@ -409,6 +537,7 @@
   transition: all 160ms ease;
 }
 
+/* chip seleccionado*/
 .route-chip.active {
   background: #0f172a;
   border-color: #0f172a;
@@ -430,7 +559,7 @@
 /* Carrusel horizontal de unidades */
 .units-carousel {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   overflow-x: auto;
   padding: 2px 2px 6px 2px;
   flex-shrink: 0;
@@ -444,7 +573,7 @@
 
 .unit-card {
   width: 224px;
-  min-height: 98px;
+  min-height: 88px;
   flex-shrink: 0;
   scroll-snap-align: start;
   background: rgba(255, 255, 255, 0.9);

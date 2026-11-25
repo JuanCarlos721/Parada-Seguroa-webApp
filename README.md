@@ -1,6 +1,6 @@
 # Parada Segura - WebApp (PWA)
 
-Aplicación web progresiva (PWA) para el sistema ciberfísico **Parada Segura**, orientada a mejorar la seguridad nocturna y la visibilidad en tiempo real del transporte público colectivo en Tijuana (taxis de ruta y camiones urbanos).
+Aplicación web progresiva (PWA) para el sistema ciberfísico **Parada Segura**, orientada a mejorar la seguridad nocturna y la visibilidad en tiempo real del transporte público colectivo en **Tijuana** y **Guanajuato** mediante mapa interactivo en vivo (**Leaflet + OpenStreetMap**), detección de ubicación GPS con cambio manual de ciudad y simulación vehicular en tiempo real.
 
 **Universidad Autónoma de Baja California (UABC)**  
 **Facultad de Ciencias de la Ingeniería y Tecnología (FCITEC)** — Licenciatura en Desarrollo de Software (Grupo 441)  
@@ -57,14 +57,19 @@ npm run build
 │   ├── icon.svg
 │   └── manifest.webmanifest
 ├── src/
-│   ├── assets/                 # Mapa UABC e íconos SVG vectoriales
+│   ├── assets/                 # Íconos SVG vectoriales
 │   ├── components/
 │   │   ├── BottomTabBar.tsx    # Barra inferior Liquid Glass (Mapa, Parada IoT, Mi Pase, Alertas)
-│   │   ├── MapScreen.tsx       # Vista principal de mapa y Half Sheet interactivo
+│   │   ├── LiveMapCanvas.tsx   # Mapa interactivo Leaflet + OpenStreetMap multi-ciudad
+│   │   ├── MapScreen.tsx       # Vista principal de mapa, selector de ciudad y Half Sheet interactivo
 │   │   ├── PlaceholderScreen.tsx
 │   │   └── TopGreenBlur.tsx    # Capa superior #10B981 (40%) con desenfoque descendente
 │   ├── data/
-│   │   └── mockTransit.ts
+│   │   ├── cityProfiles.ts     # Perfiles geográficos y rutas de Tijuana y Guanajuato
+│   │   └── mockTransit.ts      # Tipos base de navegación (TabId)
+│   ├── hooks/
+│   │   ├── useCityLocation.ts  # Geolocalización GPS, detección Haversine y fallback manual
+│   │   └── useSimulatedUnits.ts # Simulación continua de unidades sobre polilíneas
 │   ├── App.css
 │   └── App.tsx
 └── documentacion/

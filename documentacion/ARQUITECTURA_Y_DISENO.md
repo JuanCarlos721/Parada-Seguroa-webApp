@@ -58,3 +58,15 @@ La estética de la WebApp toma como referencia directa los tokens definidos en e
 }
 ```
 Valores válidos de `action`: `"REQUEST_STOP"`, `"CANCEL_STOP"`.
+
+---
+
+## 4. Mapa interactivo multi-ciudad y telemetría simulada (`Leaflet + OpenStreetMap`)
+
+Para validar la aplicación de forma distribuida entre **Tijuana, B.C.** y **Guanajuato, Gto.** sin costos ni llaves de API propietarias, el módulo cartográfico utiliza **Leaflet** sobre mosaicos públicos de **OpenStreetMap** (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`) estilizados con filtro suave CSS (`.leaflet-tile-pane`) acorde al sistema Liquid Glass.
+
+- **Detección automática por GPS (`src/hooks/useCityLocation.ts`):** Consulta `navigator.geolocation.getCurrentPosition` al iniciar o cuando el usuario pulsa `📍 GPS`, y determina la ciudad más cercana aplicando la fórmula de **Haversine** (`detectClosestCity` en `src/data/cityProfiles.ts`). Si el permiso es denegado o no está disponible (por ejemplo, en contexto HTTP local no seguro), aplica un *fallback* automático hacia el perfil predeterminado sin bloquear la interfaz.
+- **Selector manual en vivo (`MapScreen.tsx`):** Píldoras Liquid Glass (`Tijuana`, `Guanajuato`, `📍 GPS`) y botón de recentrado (`⌖`) que ejecutan transiciones suaves (`map.flyTo(...)`) entre las rutas reales de ambas ciudades:
+  - **Tijuana (`tijuana`):** `Calz. del Tecnológico · Parada P14`, ruta `Postal/TEC/UABC → Centro`.
+  - **Guanajuato (`guanajuato`):** `Zona Centro · Parada P08`, ruta `Centro → Marfil / Noria Alta`.
+- **Simulación vehicular continua (`src/hooks/useSimulatedUnits.ts`):** Actualiza la posición `[lat, lng]` de cada unidad cada `1200 ms` mediante interpolación lineal sobre la polilínea vial de la ciudad activa, recalculando en tiempo real su distancia hacia la parada (`m`), el `ETA` en minutos y el estado en el `SEMÁFORO EN VIVO`.
