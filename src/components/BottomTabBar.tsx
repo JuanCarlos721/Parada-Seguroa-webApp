@@ -11,7 +11,7 @@ interface BottomTabBarProps {
 
 const TAB_ITEMS: { id: TabId; label: string; icon: string; nativeBlue?: boolean }[] = [
   { id: 'mapa', label: 'Mapa', icon: iconMapa, nativeBlue: true },
-  { id: 'parada-iot', label: 'Parada IoT', icon: iconParada },
+  { id: 'parada', label: 'Parada', icon: iconParada },
   { id: 'mi-pase', label: 'Mi Pase', icon: iconPase },
   { id: 'alertas', label: 'Alertas', icon: iconAlertas },
 ]

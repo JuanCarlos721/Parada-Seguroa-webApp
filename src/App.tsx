@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { BottomTabBar } from './components/BottomTabBar'
 import { MapScreen } from './components/MapScreen'
+import { ParadaScreen } from './components/ParadaScreen'
 import { PlaceholderScreen } from './components/PlaceholderScreen'
 import { TopGreenBlur } from './components/TopGreenBlur'
 import type { TabId } from './data/mockTransit'
 import './App.css'
 
-const PLACEHOLDER_TITLES: Record<Exclude<TabId, 'mapa'>, string> = {
-  'parada-iot': 'Parada IoT',
+const PLACEHOLDER_TITLES: Record<Exclude<TabId, 'mapa' | 'parada'>, string> = {
   'mi-pase': 'Mi Pase',
   alertas: 'Alertas',
 }
@@ -22,6 +22,8 @@ export function App() {
 
         {activeTab === 'mapa' ? (
           <MapScreen />
+        ) : activeTab === 'parada' ? (
+          <ParadaScreen onBackToMap={() => setActiveTab('mapa')} />
         ) : (
           <PlaceholderScreen screenName={PLACEHOLDER_TITLES[activeTab]} />
         )}

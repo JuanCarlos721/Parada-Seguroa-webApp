@@ -70,3 +70,14 @@ Para validar la aplicación de forma distribuida entre **Tijuana, B.C.** y **Gua
   - **Tijuana (`tijuana`):** `Calz. del Tecnológico · Parada P14`, ruta `Postal/TEC/UABC → Centro`.
   - **Guanajuato (`guanajuato`):** `Zona Centro · Parada P08`, ruta `Centro → Marfil / Noria Alta`.
 - **Simulación vehicular continua (`src/hooks/useSimulatedUnits.ts`):** Actualiza la posición `[lat, lng]` de cada unidad cada `1200 ms` mediante interpolación lineal sobre la polilínea vial de la ciudad activa, recalculando en tiempo real su distancia hacia la parada (`m`), el `ETA` en minutos y el estado en el `SEMÁFORO EN VIVO`.
+
+---
+
+## 5. Módulo **Parada** e integración de hardware ESP32 (`MQTT WSS + REST`)
+
+La segunda pestaña inferior (**`Parada`**, `src/components/ParadaScreen.tsx`) conecta directamente la interfaz Liquid Glass con el nodo físico ESP32 sin barra segmentada superior, centrando la vista en el estado operativo de la parada:
+
+- **Conexión remota MQTT sobre WebSockets TLS (`src/hooks/useParadaHardware.ts`):** Se conecta a `wss://broker.emqx.io:8084/mqtt`, se suscribe a `parada_segura_uabc_441/p14/estado` y publica comandos (`REQUEST_STOP` / `CANCEL_STOP`) en `parada_segura_uabc_441/p14/comandos`.
+- **Puente HTTP REST local (`vite.config.ts`):** Expone `/api/parada/p14/health`, `/api/parada/p14/estado` y `/api/parada/p14/comandos` durante el entorno de desarrollo (y Docker dev) para pruebas locales mediante `POST`/`GET` JSON con tiempo máximo de espera de `5 s` (`AbortController`).
+- **Validación defensiva (`src/types/paradaHardware.ts`):** `parseAndValidateTelemetry` protege contra tramas JSON truncadas y acota lecturas físicas (`0 ≤ lux ≤ 10000`, `0 ≤ seats_free ≤ 60`), conservando la última lectura válida en pantalla si llega un dato anómalo o si se pierde la red.
+- **Control seguro por identificación de equipo:** El botón **Solicitar Parada (Encender Baliza 360°)** solo se habilita cuando existe un ESP32 identificado o cuando se activa el modo de prueba QA desde el icono discreto superior.

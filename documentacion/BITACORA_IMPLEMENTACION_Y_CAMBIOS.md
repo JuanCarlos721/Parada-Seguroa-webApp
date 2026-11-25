@@ -61,3 +61,14 @@ Para permitir pruebas en tiempo real tanto en **Tijuana, Baja California** como 
 - **Geolocalización con fallback (`src/hooks/useCityLocation.ts`):** Solicita la ubicación del navegador vía `navigator.geolocation`, selecciona automáticamente la ciudad más cercana y muestra el marcador pulsante de posición del usuario cuando hay permiso; en caso contrario o durante pruebas locales por HTTP, permite cambiar manualmente entre **Tijuana**, **Guanajuato** y reintento **📍 GPS** desde píldoras Liquid Glass en la parte superior del mapa, junto con un botón de recentrado (`⌖`).
 - **Motor de unidades simuladas (`src/hooks/useSimulatedUnits.ts`):** Interpola de manera continua cada `1200 ms` la coordenada de cada camión y taxi sobre la polilínea de la ciudad activa, actualizando dinámicamente los marcadores del mapa, las tarjetas del Half Sheet (distancia en metros y minutos estimados de llegada) y el componente `SEMÁFORO EN VIVO`.
 - **Ajustes visuales Liquid Glass (`src/App.css`):** Integración de los controles de Leaflet sin marca de agua comercial, filtro suave de mosaicos OSM para armonizar con los desenfoques translúcidos y ajuste de altura del Half Sheet (`59%`) para mantener visible el botón de solicitud de parada por encima de la barra de pestañas inferior.
+
+---
+
+## 6. Módulo 2: Pantalla **Parada** e integración de hardware ESP32 (`v0.3.0`)
+
+En esta iteración se habilitó la segunda vista principal de la WebApp alineada al diseño del prototipo y al contrato técnico de pruebas de integración:
+
+- **Renombrado y simplificación visual (`BottomTabBar.tsx`, `ParadaScreen.tsx`):** La pestaña y vista pasaron de `Parada IoT` a **`Parada`**, eliminando la barra segmentada superior (`Nodo IoT`, `Consola Chofer`, `Telemetría`) para priorizar los indicadores clave en una vista única Liquid Glass.
+- **Telemetría reactiva en tiempo real (`useParadaHardware.ts`, `paradaHardware.ts`):** Tarjeta Hero del **Aro LED WS2812B** (`0%`, `30%` cortesía LDR, `100%` baliza 360°), **Fotorresistencia LDR** con barra de **nivel de iluminación ambiental** (`GPIO 34`), **Conectividad ESP32** (`MQTT QoS 1` / `HTTP Bridge`) y parámetros en vivo (`button_pressed`, `occupancy_color`, `seats_free`).
+- **Endpoints listos para el nodo físico (`mqtt` + `vite.config.ts`):** Integración nativa en navegador con `wss://broker.emqx.io:8084/mqtt` (`parada_segura_uabc_441/p14/estado` y `comandos`), además de puente HTTP REST local en `/api/parada/p14/*` y cajón plegable dentro de la pantalla con la referencia completa de conexión para el hardware ESP32.
+- **Bloqueo operativo sin hardware y menú oculto de pruebas QA:** El botón **Solicitar Parada** permanece bloqueado mientras no se identifique un equipo conectado. Mediante un icono discreto en el encabezado se accede a un panel de simulación para alternar entre **Hardware Real**, **Falsa Conexión ESP32** (Penumbra, Día o Rango Inválido) y **Falla Abrupta de Red** (Offline-First con botón de reintento).

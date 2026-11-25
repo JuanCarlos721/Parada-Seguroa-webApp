@@ -1,1 +1,1 @@
-export type TabId = 'mapa' | 'parada-iot' | 'mi-pase' | 'alertas'
+export type TabId = 'mapa' | 'parada' | 'mi-pase' | 'alertas'

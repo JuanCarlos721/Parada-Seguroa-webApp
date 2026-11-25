@@ -59,9 +59,10 @@ npm run build
 ├── src/
 │   ├── assets/                 # Íconos SVG vectoriales
 │   ├── components/
-│   │   ├── BottomTabBar.tsx    # Barra inferior Liquid Glass (Mapa, Parada IoT, Mi Pase, Alertas)
+│   │   ├── BottomTabBar.tsx    # Barra inferior Liquid Glass (Mapa, Parada, Mi Pase, Alertas)
 │   │   ├── LiveMapCanvas.tsx   # Mapa interactivo Leaflet + OpenStreetMap multi-ciudad
 │   │   ├── MapScreen.tsx       # Vista principal de mapa, selector de ciudad y Half Sheet interactivo
+│   │   ├── ParadaScreen.tsx    # Módulo Parada: Aro LED, LDR, conectividad ESP32 y pruebas QA
 │   │   ├── PlaceholderScreen.tsx
 │   │   └── TopGreenBlur.tsx    # Capa superior #10B981 (40%) con desenfoque descendente
 │   ├── data/
@@ -69,7 +70,10 @@ npm run build
 │   │   └── mockTransit.ts      # Tipos base de navegación (TabId)
 │   ├── hooks/
 │   │   ├── useCityLocation.ts  # Geolocalización GPS, detección Haversine y fallback manual
+│   │   ├── useParadaHardware.ts # Conexión MQTT WSS + puente REST + simulación QA del ESP32
 │   │   └── useSimulatedUnits.ts # Simulación continua de unidades sobre polilíneas
+│   ├── types/
+│   │   └── paradaHardware.ts   # Contratos JSON y validación de rangos para sensores ESP32
 │   ├── App.css
 │   └── App.tsx
 └── documentacion/

@@ -849,3 +849,644 @@
   color: #64748b;
   max-width: 260px;
 }
+
+/* Pantalla Parada (Módulo 2: IoT + Control ESP32) */
+.parada-screen {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #ecfdf5 0%, #f8fafc 22%, #f1f5f9 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: calc(46px + env(safe-area-inset-top, 0px));
+}
+
+.parada-header {
+  position: relative;
+  z-index: 32;
+  margin: 0 14px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(185%);
+  -webkit-backdrop-filter: blur(20px) saturate(185%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.parada-back-btn {
+  border: none;
+  background: transparent;
+  color: #007aff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.parada-header-center {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.parada-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.parada-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.parada-status-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.parada-status-pill.green {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.parada-status-pill.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.parada-status-pill.amber {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.parada-status-pill.red {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.parada-status-pill.neutral {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* Icono pequeño y discreto para simulación QA oculta */
+.qa-hidden-trigger {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(148, 163, 184, 0.14);
+  color: #64748b;
+  opacity: 0.48;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.qa-hidden-trigger:hover,
+.qa-hidden-trigger.active {
+  opacity: 1;
+  background: rgba(0, 122, 255, 0.12);
+  border-color: rgba(0, 122, 255, 0.25);
+  color: #007aff;
+}
+
+.qa-popover {
+  position: relative;
+  z-index: 34;
+  margin: 8px 14px 0 14px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(22px) saturate(190%);
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.qa-popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.qa-popover-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.qa-close-btn {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.qa-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.qa-mode-btn {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  border-radius: 11px;
+  padding: 7px 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.qa-mode-btn.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.qa-mode-btn.active-sim {
+  background: #007aff;
+  border-color: #007aff;
+  color: #ffffff;
+}
+
+.qa-mode-btn.active-err {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.qa-preset-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.qa-preset-chip {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qa-preset-chip.active {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  color: #1e40af;
+}
+
+.parada-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 10px 14px calc(92px + env(safe-area-inset-bottom, 0px)) 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.parada-scroll-body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tarjeta Hero Aro LED WS2812B */
+.iot-hero-card {
+  background: #0f172a;
+  color: #ffffff;
+  border-radius: 22px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  border: 1px solid #1e293b;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+}
+
+.iot-hero-card.alert-mode {
+  background: #062c22;
+  border: 1.5px solid #10b981;
+  box-shadow: 0 12px 26px rgba(16, 185, 129, 0.24);
+}
+
+.iot-hero-card.offline-mode {
+  background: #2b1810;
+  border: 1.5px solid #f59e0b;
+}
+
+.iot-hero-card.waiting-mode {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.iot-ring-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes beaconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.5));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 14px rgba(52, 211, 153, 0.85));
+  }
+}
+
+.ring-pulse {
+  animation: beaconPulse 1.8s ease-in-out infinite;
+}
+
+.iot-hero-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.iot-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(253, 224, 71, 0.16);
+  color: #fde047;
+  margin-bottom: 5px;
+}
+
+.iot-status-pill.active-green {
+  background: rgba(16, 185, 129, 0.24);
+  color: #34d399;
+}
+
+.iot-status-pill.warn-amber {
+  background: rgba(245, 158, 11, 0.22);
+  color: #fbbf24;
+}
+
+.iot-status-pill.day-sky {
+  background: rgba(56, 189, 248, 0.2);
+  color: #7dd3fc;
+}
+
+.iot-status-pill.waiting-slate {
+  background: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+}
+
+.iot-hero-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.iot-hero-desc {
+  margin: 4px 0 0 0;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: #cbd5e1;
+}
+
+.parada-warning-banner {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  border-radius: 14px;
+  padding: 8px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.parada-warning-banner button {
+  border: none;
+  background: transparent;
+  color: #92400e;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Grid 2 columnas Sensores + Conectividad */
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sensor-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  border-radius: 18px;
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.sensor-card-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.sensor-card-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.sensor-card-value.text-green {
+  color: #059669;
+}
+
+.sensor-card-value.text-red {
+  color: #dc2626;
+}
+
+.sensor-card-value.text-muted {
+  color: #475569;
+}
+
+.parada-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.parada-badge.green {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.parada-badge.amber {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.parada-badge.red {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.parada-badge.neutral {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.light-level-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.light-level-track {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.light-level-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 260ms ease;
+}
+
+.light-level-fill.amber {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.light-level-fill.green {
+  background: linear-gradient(90deg, #10b981, #38bdf8);
+}
+
+.light-level-fill.neutral {
+  background: #94a3b8;
+}
+
+.sensor-card-meta {
+  font-size: 10.5px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card de parámetros y Endpoints ESP32 */
+.parada-info-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  border-radius: 18px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.parada-info-card.confirmed {
+  background: rgba(240, 253, 244, 0.92);
+  border-color: #10b981;
+}
+
+.info-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.parada-params-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.param-k {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.param-v {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 2px;
+}
+
+.endpoints-toggle-btn {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  border-radius: 11px;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.endpoints-drawer {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.endpoints-drawer code {
+  color: #6ee7b7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  word-break: break-all;
+}
+
+.endpoints-json-sample {
+  margin: 4px 0 0 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #fde68a;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 9.5px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.parada-actions-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-parada {
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  padding: 13px 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 150ms ease, transform 120ms ease, opacity 150ms ease;
+}
+
+.btn-parada:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.btn-parada.primary {
+  background: #007aff;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.24);
+}
+
+.btn-parada.primary:hover:not(:disabled) {
+  background: #0066d6;
+}
+
+.btn-parada.primary:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-parada.danger {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.btn-parada.danger:hover {
+  background: #fee2e2;
+}
+
+.parada-guard-hint {
+  margin: 0;
+  text-align: center;
+  font-size: 11px;
+  color: #64748b;
+}
