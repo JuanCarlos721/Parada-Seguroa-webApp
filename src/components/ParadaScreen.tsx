@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useParadaHardware } from '../hooks/useParadaHardware'
+import { useParadaApp } from '../context/ParadaAppContext'
 import { PARADA_HARDWARE_CONFIG } from '../types/paradaHardware'
 
 interface ParadaScreenProps {
@@ -41,24 +41,26 @@ function getLightingClassification(lux: number | undefined) {
 
 export function ParadaScreen({ onBackToMap }: ParadaScreenProps) {
   const {
-    mode,
-    connectionState,
-    brokerConnected,
-    telemetry,
-    warning,
-    latencyMs,
-    lastCommandAction,
-    reconnectAttempt,
-    mockPreset,
-    isHardwareReady,
-    isAlertActive,
-    setMode,
-    setMockPreset,
-    requestStop,
-    cancelStop,
-    retryConnection,
-    clearWarning,
-  } = useParadaHardware()
+    hardware: {
+      mode,
+      connectionState,
+      brokerConnected,
+      telemetry,
+      warning,
+      latencyMs,
+      lastCommandAction,
+      reconnectAttempt,
+      mockPreset,
+      isHardwareReady,
+      isAlertActive,
+      setMode,
+      setMockPreset,
+      requestStop,
+      cancelStop,
+      retryConnection,
+      clearWarning,
+    },
+  } = useParadaApp()
 
   const [qaMenuOpen, setQaMenuOpen] = useState(false)
 

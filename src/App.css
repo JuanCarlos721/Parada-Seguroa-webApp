@@ -1444,3 +1444,631 @@
   font-size: 11px;
   color: #64748b;
 }
+
+/* Pantalla Mi Pase y Viajes (Liquid Glass + Tarjeta QR/NFC) */
+.pase-header-left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.pase-nav-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pase-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pase-balance-text {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.pase-balance-text.positive {
+  color: #059669;
+}
+
+.pase-balance-text.zero {
+  color: #475569;
+}
+
+.pase-recharge-pill {
+  border: none;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 140ms ease, transform 120ms ease;
+}
+
+.pase-recharge-pill:hover {
+  background: #bfdbfe;
+}
+
+.pase-recharge-pill:active {
+  transform: scale(0.97);
+}
+
+.recharge-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.recharge-preset-btn {
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 10px;
+  padding: 7px 4px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.recharge-preset-btn:hover {
+  background: #dbeafe;
+}
+
+.recharge-custom-row {
+  display: flex;
+  gap: 8px;
+}
+
+.recharge-custom-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+}
+
+.recharge-apply-btn {
+  border: none;
+  background: #007aff;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wallet-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  border-radius: 22px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.22);
+}
+
+.wallet-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallet-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  color: #93c5fd;
+  letter-spacing: 0.04em;
+}
+
+.wallet-student-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+.wallet-fare-badge {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.qr-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+}
+
+.qr-trigger-btn {
+  width: 100%;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.qr-trigger-btn:hover {
+  border-color: #007aff;
+  background: #f0f9ff;
+}
+
+.qr-svg.idle {
+  opacity: 0.45;
+}
+
+.qr-timer-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.qr-timer-accent {
+  color: #007aff;
+}
+
+.nfc-toggle-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.nfc-status-pill-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.nfc-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.nfc-indicator-dot.on {
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+}
+
+.nfc-indicator-dot.off {
+  background: #94a3b8;
+}
+
+.nfc-status-text {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nfc-status-text.on {
+  color: #047857;
+}
+
+.nfc-status-text.off {
+  color: #64748b;
+}
+
+.ios-switch {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  border: none;
+  background: #cbd5e1;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 180ms ease;
+  flex-shrink: 0;
+}
+
+.ios-switch.on {
+  background: #10b981;
+}
+
+.ios-switch-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.22);
+  transform: translateX(0);
+  transition: transform 180ms ease;
+}
+
+.ios-switch.on .ios-switch-thumb {
+  transform: translateX(18px);
+}
+
+.pase-feedback-banner {
+  border-radius: 12px;
+  padding: 8px 11px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pase-feedback-banner.ok {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.pase-feedback-banner.err {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.pase-feedback-banner button {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.trip-route-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.trip-route-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.trip-route-chip {
+  flex-shrink: 0;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trip-route-chip.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.trip-sim-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fare-pill-group {
+  display: inline-flex;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.fare-chip {
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fare-chip.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+}
+
+.btn-simulate-trip {
+  flex: 1;
+  border: none;
+  background: #007aff;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-simulate-trip:hover {
+  background: #0066d6;
+}
+
+.pase-section-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.pase-count-accent {
+  color: #007aff;
+}
+
+.history-scroll-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-item-text {
+  min-width: 0;
+}
+
+.history-route {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.history-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.history-amount {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0f172a;
+  flex-shrink: 0;
+}
+
+/* Pantalla Notificaciones / Alertas (Figma frame_alertas_iot + Liquid Glass) */
+.alerts-glass-header {
+  padding: 10px 14px;
+}
+
+.alerts-main-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.alerts-main-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.alerts-online-pill {
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.alerts-online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #10b981;
+}
+
+.alerts-mark-read-btn {
+  border: none;
+  background: transparent;
+  color: #007aff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.alerts-mark-read-btn:disabled {
+  color: #94a3b8;
+  cursor: default;
+}
+
+.alerts-scroll-viewport {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.alert-card {
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 18px;
+  padding: 12px 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+}
+
+.alert-card.unread {
+  border-color: #bfdbfe;
+  background: rgba(248, 251, 255, 0.94);
+}
+
+.alert-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alert-icon-box.icon-green {
+  background: #d1fae5;
+}
+
+.alert-icon-box.icon-blue {
+  background: #dbeafe;
+}
+
+.alert-icon-box.icon-amber {
+  background: #fef3c7;
+}
+
+.alert-icon-box.icon-purple {
+  background: #ede9fe;
+}
+
+.alert-icon-box.icon-sky {
+  background: #e0f2fe;
+}
+
+.alert-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.alert-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.alert-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge-green {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.badge-blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badge-amber {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge-purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.badge-sky {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.alert-time-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.alert-unread-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #007aff;
+}
+
+.alert-time {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.alert-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.alert-text {
+  margin: 0;
+  font-size: 11.5px;
+  color: #475569;
+  line-height: 1.38;
+}

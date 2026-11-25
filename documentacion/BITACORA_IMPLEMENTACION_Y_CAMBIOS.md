@@ -72,3 +72,17 @@ En esta iteración se habilitó la segunda vista principal de la WebApp alineada
 - **Telemetría reactiva en tiempo real (`useParadaHardware.ts`, `paradaHardware.ts`):** Tarjeta Hero del **Aro LED WS2812B** (`0%`, `30%` cortesía LDR, `100%` baliza 360°), **Fotorresistencia LDR** con barra de **nivel de iluminación ambiental** (`GPIO 34`), **Conectividad ESP32** (`MQTT QoS 1` / `HTTP Bridge`) y parámetros en vivo (`button_pressed`, `occupancy_color`, `seats_free`).
 - **Endpoints listos para el nodo físico (`mqtt` + `vite.config.ts`):** Integración nativa en navegador con `wss://broker.emqx.io:8084/mqtt` (`parada_segura_uabc_441/p14/estado` y `comandos`), además de puente HTTP REST local en `/api/parada/p14/*`, documentados directamente en `README.md` y `ARQUITECTURA_Y_DISENO.md`.
 - **Bloqueo operativo sin hardware y menú oculto de pruebas QA:** El botón **Solicitar Parada** permanece bloqueado mientras no se identifique un equipo conectado. Mediante un icono discreto en el encabezado se accede a un panel de simulación para alternar entre **Hardware Real**, **Prueba / Falsa Conexión** (Penumbra, Día o Rango Inválido) y **Simular desconexión** (Offline-First con botón de reintento).
+
+---
+
+## 7. Módulos **Mi Pase** y **Alertas** completos (`v0.4.0`)
+
+Con esta entrega quedan operativas las cuatro pestañas principales de la aplicación bajo una arquitectura de estado compartido en memoria (`ParadaAppContext`):
+
+- **Mi Pase (`MiPaseScreen.tsx`):**
+  - Credencial estudiantil **`Marcel Díaz · UABC`** con saldo inicial en `$0.00 MXN` y modal compacto **`+ Recargar`** para abonar montos simulados.
+  - Visualización simultánea del **código QR genérico regenerable por 60 segundos** (con cuenta regresiva en vivo) y el **interruptor independiente de NFC** (`Encendido` / `Apagado`).
+  - Simulador de viajes adaptado automáticamente a la ciudad activa (**Tijuana** o **Guanajuato**), con validación de saldo y método activo, actualización dinámica de saldo y registro en el historial vertical.
+- **Alertas (`AlertasScreen.tsx`):**
+  - Conserva las 7 notificaciones base del diseño original e inserta al inicio cada nuevo evento en orden cronológico inverso: abonos realizados (incluyendo fecha y hora, monto, saldo previo y posterior), viajes simulados y solicitudes de parada originadas en el módulo **Parada** (conexión real o simulada).
+  - Incluye botón **`Marcar como leídas`** y estado visual diferenciado para notificaciones no leídas.

@@ -3,7 +3,7 @@ import { detectClosestCity, type CityId } from '../data/cityProfiles'
 
 export type GeoStatus = 'detecting' | 'active' | 'fallback'
 
-interface UseCityLocationResult {
+export interface UseCityLocationResult {
   cityId: CityId
   userCoords: [number, number] | null
   geoStatus: GeoStatus

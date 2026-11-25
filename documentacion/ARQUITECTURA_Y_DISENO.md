@@ -92,3 +92,16 @@ La segunda pestaña inferior (**`Parada`**, `src/components/ParadaScreen.tsx`) c
 | **REST Salud** | `/api/parada/p14/health` | `HTTP GET` (Vite / Docker dev) | Diagnóstico rápido de disponibilidad |
 | **REST Estado** | `/api/parada/p14/estado` | `HTTP POST` / `GET` | Alternativa LAN HTTP con retorno de `pending_command` |
 | **REST Comandos** | `/api/parada/p14/comandos` | `HTTP GET` / `POST` | Polling de solicitud de parada |
+
+---
+
+## 6. Módulos **Mi Pase** y **Alertas** y estado compartido en memoria
+
+- **Contexto compartido (`src/context/ParadaAppContext.tsx`):** Coordina en memoria la ciudad activa (`Tijuana` o `Guanajuato`), el estado del hardware de **Parada**, el saldo de **Mi Pase** (iniciando en `$0.00 MXN`), el historial de viajes y el flujo de notificaciones.
+- **Mi Pase (`src/components/MiPaseScreen.tsx`):**
+  - Conserva la credencial base **`Marcel Díaz · UABC`** (`$8.00 MXN`) con saldo inicial en `$0.00 MXN` y botón `+ Recargar` (montos predefinidos y monto personalizado).
+  - Incluye simultáneamente generación bajo demanda del código **QR genérico con temporizador de 60 s** y un interruptor **NFC Encendido / Apagado**.
+  - Permite simular viajes sobre rutas de la ciudad activa (**Tijuana** o **Guanajuato**), validando método activo (QR vigente o NFC encendido) y saldo suficiente.
+- **Alertas (`src/components/AlertasScreen.tsx`):**
+  - Mantiene las 7 notificaciones iniciales de referencia del prototipo y apila en la parte superior cada evento generado en vivo (abonos con fecha/hora, monto, saldo previo y posterior; viajes cobrados; y solicitudes de parada emitidas desde el módulo **Parada**).
+  - Incorpora control para marcar todas las notificaciones como leídas sin sobrecargar la barra inferior de navegación.

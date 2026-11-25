@@ -59,15 +59,19 @@ npm run build
 ├── src/
 │   ├── assets/                 # Íconos SVG vectoriales
 │   ├── components/
+│   │   ├── AlertasScreen.tsx   # Centro de notificaciones y eventos en vivo
 │   │   ├── BottomTabBar.tsx    # Barra inferior Liquid Glass (Mapa, Parada, Mi Pase, Alertas)
 │   │   ├── LiveMapCanvas.tsx   # Mapa interactivo Leaflet + OpenStreetMap multi-ciudad
 │   │   ├── MapScreen.tsx       # Vista principal de mapa, selector de ciudad y Half Sheet interactivo
+│   │   ├── MiPaseScreen.tsx    # Credencial estudiantil, QR de 60s, toggle NFC, recargas y viajes
 │   │   ├── ParadaScreen.tsx    # Módulo Parada: Aro LED, LDR, conectividad ESP32 y pruebas QA
-│   │   ├── PlaceholderScreen.tsx
 │   │   └── TopGreenBlur.tsx    # Capa superior #10B981 (40%) con desenfoque descendente
+│   ├── context/
+│   │   └── ParadaAppContext.tsx # Estado compartido en memoria entre los 4 módulos
 │   ├── data/
 │   │   ├── cityProfiles.ts     # Perfiles geográficos y rutas de Tijuana y Guanajuato
-│   │   └── mockTransit.ts      # Tipos base de navegación (TabId)
+│   │   ├── mockTransit.ts      # Tipos base de navegación (TabId)
+│   │   └── passAndAlerts.ts    # Notificaciones base, historial y rutas simulables por ciudad
 │   ├── hooks/
 │   │   ├── useCityLocation.ts  # Geolocalización GPS, detección Haversine y fallback manual
 │   │   ├── useParadaHardware.ts # Conexión MQTT WSS + puente REST + simulación QA del ESP32

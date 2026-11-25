@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import iconSearch from '../assets/icon-search.svg'
+import { useParadaApp } from '../context/ParadaAppContext'
 import { CITY_PROFILES } from '../data/cityProfiles'
-import { useCityLocation } from '../hooks/useCityLocation'
 import { useSimulatedUnits, type SimulatedUnit } from '../hooks/useSimulatedUnits'
 import { LiveMapCanvas } from './LiveMapCanvas'
 
 export function MapScreen() {
-  const { cityId, userCoords, geoStatus, manualOverride, selectCity, requestGps } =
-    useCityLocation('tijuana')
+  const {
+    cityLocation: { cityId, userCoords, geoStatus, manualOverride, selectCity, requestGps },
+  } = useParadaApp()
   const profile = CITY_PROFILES[cityId]
   const simulatedUnits = useSimulatedUnits(profile)
 

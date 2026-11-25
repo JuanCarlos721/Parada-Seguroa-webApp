@@ -1,36 +1,37 @@
 import { useState } from 'react'
+import { AlertasScreen } from './components/AlertasScreen'
 import { BottomTabBar } from './components/BottomTabBar'
 import { MapScreen } from './components/MapScreen'
+import { MiPaseScreen } from './components/MiPaseScreen'
 import { ParadaScreen } from './components/ParadaScreen'
-import { PlaceholderScreen } from './components/PlaceholderScreen'
 import { TopGreenBlur } from './components/TopGreenBlur'
+import { ParadaAppProvider } from './context/ParadaAppContext'
 import type { TabId } from './data/mockTransit'
 import './App.css'
-
-const PLACEHOLDER_TITLES: Record<Exclude<TabId, 'mapa' | 'parada'>, string> = {
-  'mi-pase': 'Mi Pase',
-  alertas: 'Alertas',
-}
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabId>('mapa')
 
   return (
-    <div className="app-viewport">
-      <div className="app-shell">
-        <TopGreenBlur />
+    <ParadaAppProvider>
+      <div className="app-viewport">
+        <div className="app-shell">
+          <TopGreenBlur />
 
-        {activeTab === 'mapa' ? (
-          <MapScreen />
-        ) : activeTab === 'parada' ? (
-          <ParadaScreen onBackToMap={() => setActiveTab('mapa')} />
-        ) : (
-          <PlaceholderScreen screenName={PLACEHOLDER_TITLES[activeTab]} />
-        )}
+          {activeTab === 'mapa' ? (
+            <MapScreen />
+          ) : activeTab === 'parada' ? (
+            <ParadaScreen onBackToMap={() => setActiveTab('mapa')} />
+          ) : activeTab === 'mi-pase' ? (
+            <MiPaseScreen />
+          ) : (
+            <AlertasScreen />
+          )}
 
-        <BottomTabBar activeTab={activeTab} onSelectTab={setActiveTab} />
+          <BottomTabBar activeTab={activeTab} onSelectTab={setActiveTab} />
+        </div>
       </div>
-    </div>
+    </ParadaAppProvider>
   )
 }
 
