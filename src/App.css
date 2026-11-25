@@ -669,6 +669,22 @@
   justify-content: space-between;
   gap: 10px;
   flex-shrink: 0;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.semaforo-banner.green {
+  background: rgba(236, 253, 245, 0.94);
+  border-color: #a7f3d0;
+}
+
+.semaforo-banner.yellow {
+  background: rgba(255, 252, 229, 0.94);
+  border-color: #f7eabb;
+}
+
+.semaforo-banner.red {
+  background: rgba(254, 242, 242, 0.94);
+  border-color: #fecaca;
 }
 
 .semaforo-title {
@@ -677,10 +693,26 @@
   color: #6f6d04;
 }
 
+.semaforo-banner.green .semaforo-title {
+  color: #065f46;
+}
+
+.semaforo-banner.red .semaforo-title {
+  color: #991b1b;
+}
+
 .semaforo-sub {
   font-size: 11px;
   color: #93903c;
   margin-top: 1px;
+}
+
+.semaforo-banner.green .semaforo-sub {
+  color: #047857;
+}
+
+.semaforo-banner.red .semaforo-sub {
+  color: #b91c1c;
 }
 
 .semaforo-lights-pill {
@@ -692,6 +724,15 @@
   align-items: center;
   gap: 5px;
   flex-shrink: 0;
+  transition: border-color 180ms ease;
+}
+
+.semaforo-banner.green .semaforo-lights-pill {
+  border-color: #10b981;
+}
+
+.semaforo-banner.red .semaforo-lights-pill {
+  border-color: #ef4444;
 }
 
 .semaforo-dot {

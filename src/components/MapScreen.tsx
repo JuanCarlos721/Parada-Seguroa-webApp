@@ -216,7 +216,7 @@ export function MapScreen() {
         </div>
 
         {/* Semáforo de aforo en vivo */}
-        <div className="semaforo-banner">
+        <div className={`semaforo-banner ${highlightedUnit.occupancyColor}`}>
           <div>
             <div className="semaforo-title">SEMÁFORO EN VIVO</div>
             <div className="semaforo-sub">
