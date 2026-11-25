@@ -41,7 +41,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: calc(20px + env(safe-area-inset-top, 0px));
+  height: calc(16px + env(safe-area-inset-top, 0px));
+  transform: translateY(-30%);
   z-index: 20;
   pointer-events: none;
   overflow: hidden;
@@ -50,6 +51,7 @@
 @media (min-width: 500px) and (min-height: 760px) {
   .top-green-blur-layer {
     height: 52px;
+    transform: translateY(-30%);
   }
 }
 

@@ -64,6 +64,7 @@ export function MiPaseScreen() {
   const cityProfile = CITY_PROFILES[cityId]
 
   const [rechargeOpen, setRechargeOpen] = useState(false)
+  const [tripSimOpen, setTripSimOpen] = useState(false)
   const [customAmount, setCustomAmount] = useState('50')
   const [qrSecondsLeft, setQrSecondsLeft] = useState(0)
   const [qrSeed, setQrSeed] = useState(0)
@@ -157,11 +158,31 @@ export function MiPaseScreen() {
             className="pase-recharge-pill"
             onClick={() => {
               setRechargeOpen((prev) => !prev)
+              setTripSimOpen(false)
               setFeedback(null)
             }}
             aria-expanded={rechargeOpen}
           >
             + Recargar
+          </button>
+          <button
+            type="button"
+            className={`qa-hidden-trigger ${tripSimOpen ? 'active' : ''}`}
+            onClick={() => {
+              setTripSimOpen((prev) => !prev)
+              setRechargeOpen(false)
+              setFeedback(null)
+            }}
+            aria-label="Opciones ocultas para simular viaje"
+            aria-expanded={tripSimOpen}
+            title="Simular viaje"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="14" rx="3" stroke="currentColor" strokeWidth="1.9" />
+              <path d="M4 11h16M8 18v2M16 18v2" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
+              <circle cx="8" cy="14.5" r="1" fill="currentColor" />
+              <circle cx="16" cy="14.5" r="1" fill="currentColor" />
+            </svg>
           </button>
         </div>
       </header>
@@ -212,6 +233,67 @@ export function MiPaseScreen() {
               onClick={() => handleConfirmRecharge(Number(customAmount))}
             >
               Abonar
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* Panel oculto para simular viajes según la ciudad activa (Tijuana o Guanajuato) */}
+      {tripSimOpen && (
+        <section className="qa-popover" aria-label="Simulador de viaje">
+          <div className="qa-popover-head">
+            <span className="qa-popover-title">
+              Simular viaje · {cityProfile.name} ({cityProfile.shortCode})
+            </span>
+            <button
+              type="button"
+              className="qa-close-btn"
+              onClick={() => setTripSimOpen(false)}
+              aria-label="Cerrar simulador de viaje"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="trip-route-pills" role="group" aria-label="Ruta del viaje simulado">
+            {cityRoutes.map((route) => {
+              const isSelected = route.id === selectedRouteId
+              return (
+                <button
+                  key={route.id}
+                  type="button"
+                  className={`trip-route-chip ${isSelected ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedRouteId(route.id)
+                    setSelectedFare(route.defaultFare)
+                  }}
+                >
+                  {route.routeTitle.split('·')[0].trim()}
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="trip-sim-footer">
+            <div className="fare-pill-group" role="group" aria-label="Tarifa">
+              <button
+                type="button"
+                className={`fare-chip ${selectedFare === 8 ? 'active' : ''}`}
+                onClick={() => setSelectedFare(8)}
+              >
+                $8 Est.
+              </button>
+              <button
+                type="button"
+                className={`fare-chip ${selectedFare === 15 ? 'active' : ''}`}
+                onClick={() => setSelectedFare(15)}
+              >
+                $15 Gral.
+              </button>
+            </div>
+
+            <button type="button" className="btn-simulate-trip" onClick={handleSimulateTrip}>
+              Simular viaje (-${selectedFare.toFixed(2)})
             </button>
           </div>
         </section>
@@ -287,58 +369,6 @@ export function MiPaseScreen() {
             </button>
           </div>
         )}
-
-        {/* Simulador de viaje según ciudad activa (Tijuana o Guanajuato) */}
-        <section className="parada-info-card" aria-label="Simulador de viaje">
-          <div className="info-card-row">
-            <span className="sensor-card-label">
-              SIMULAR VIAJE · {cityProfile.name.toUpperCase()}
-            </span>
-            <span className="parada-badge green">{cityProfile.shortCode}</span>
-          </div>
-
-          <div className="trip-route-pills" role="group" aria-label="Ruta del viaje simulado">
-            {cityRoutes.map((route) => {
-              const isSelected = route.id === selectedRouteId
-              return (
-                <button
-                  key={route.id}
-                  type="button"
-                  className={`trip-route-chip ${isSelected ? 'active' : ''}`}
-                  onClick={() => {
-                    setSelectedRouteId(route.id)
-                    setSelectedFare(route.defaultFare)
-                  }}
-                >
-                  {route.routeTitle.split('·')[0].trim()}
-                </button>
-              )
-            })}
-          </div>
-
-          <div className="trip-sim-footer">
-            <div className="fare-pill-group" role="group" aria-label="Tarifa">
-              <button
-                type="button"
-                className={`fare-chip ${selectedFare === 8 ? 'active' : ''}`}
-                onClick={() => setSelectedFare(8)}
-              >
-                $8 Est.
-              </button>
-              <button
-                type="button"
-                className={`fare-chip ${selectedFare === 15 ? 'active' : ''}`}
-                onClick={() => setSelectedFare(15)}
-              >
-                $15 Gral.
-              </button>
-            </div>
-
-            <button type="button" className="btn-simulate-trip" onClick={handleSimulateTrip}>
-              Simular viaje (-${selectedFare.toFixed(2)})
-            </button>
-          </div>
-        </section>
 
         {/* Historial de viajes con scroll */}
         <div className="pase-section-row">
