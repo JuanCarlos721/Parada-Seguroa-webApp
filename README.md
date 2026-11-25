@@ -4,7 +4,12 @@ Aplicación web progresiva (PWA) para el sistema ciberfísico **Parada Segura**,
 
 **Universidad Autónoma de Baja California (UABC)**  
 **Facultad de Ciencias de la Ingeniería y Tecnología (FCITEC)** — Licenciatura en Desarrollo de Software (Grupo 441)  
-**Integrantes:** Lina Lorena Hernández Gutiérrez · Juan Carlos Pérez Hernández
+**Hecho por:** Lina Lorena Hernández Gutiérrez · Juan Carlos Pérez Hernández
+
+## Clona el repositorio
+```bash
+git clone https://github.com/JuanCarlos721/Parada-Seguroa-webApp.git
+```
 
 ---
 
