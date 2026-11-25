@@ -1,4 +1,4 @@
-# Parada Segura — WebApp (PWA)
+# Parada Segura - WebApp (PWA)
 
 Aplicación web progresiva (PWA) para el sistema ciberfísico **Parada Segura**, orientada a mejorar la seguridad nocturna y la visibilidad en tiempo real del transporte público colectivo en Tijuana (taxis de ruta y camiones urbanos).
 
