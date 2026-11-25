@@ -81,3 +81,14 @@ La segunda pestaña inferior (**`Parada`**, `src/components/ParadaScreen.tsx`) c
 - **Puente HTTP REST local (`vite.config.ts`):** Expone `/api/parada/p14/health`, `/api/parada/p14/estado` y `/api/parada/p14/comandos` durante el entorno de desarrollo (y Docker dev) para pruebas locales mediante `POST`/`GET` JSON con tiempo máximo de espera de `5 s` (`AbortController`).
 - **Validación defensiva (`src/types/paradaHardware.ts`):** `parseAndValidateTelemetry` protege contra tramas JSON truncadas y acota lecturas físicas (`0 ≤ lux ≤ 10000`, `0 ≤ seats_free ≤ 60`), conservando la última lectura válida en pantalla si llega un dato anómalo o si se pierde la red.
 - **Control seguro por identificación de equipo:** El botón **Solicitar Parada (Encender Baliza 360°)** solo se habilita cuando existe un ESP32 identificado o cuando se activa el modo de prueba QA desde el icono discreto superior.
+
+### Referencia completa de endpoints para el ESP32
+| Medio | Canal / Endpoint | Método / Protocolo | Uso |
+| :--- | :--- | :--- | :--- |
+| **MQTT ESP32** | `broker.emqx.io:1883` | TCP (`mqtt://`) | Conexión directa del microcontrolador |
+| **MQTT WebApp** | `wss://broker.emqx.io:8084/mqtt` | WebSocket TLS (`wss://`) | Cliente en navegador PWA |
+| **Tópico Estado** | `parada_segura_uabc_441/p14/estado` | MQTT Publish (`ESP32 → App`) | Envío de `lux`, `night_mode`, `led_state`, `button_pressed`, `seats_free`, `occupancy_color`, `device_id`, `rssi` |
+| **Tópico Comandos** | `parada_segura_uabc_441/p14/comandos` | MQTT Subscribe (`App → ESP32`) | Recepción de `REQUEST_STOP` y `CANCEL_STOP` |
+| **REST Salud** | `/api/parada/p14/health` | `HTTP GET` (Vite / Docker dev) | Diagnóstico rápido de disponibilidad |
+| **REST Estado** | `/api/parada/p14/estado` | `HTTP POST` / `GET` | Alternativa LAN HTTP con retorno de `pending_command` |
+| **REST Comandos** | `/api/parada/p14/comandos` | `HTTP GET` / `POST` | Polling de solicitud de parada |

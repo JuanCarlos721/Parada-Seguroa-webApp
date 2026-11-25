@@ -61,7 +61,6 @@ export function ParadaScreen({ onBackToMap }: ParadaScreenProps) {
   } = useParadaHardware()
 
   const [qaMenuOpen, setQaMenuOpen] = useState(false)
-  const [endpointsOpen, setEndpointsOpen] = useState(false)
 
   const lighting = getLightingClassification(telemetry?.lux)
   const ledBrightness = telemetry?.led_brightness ?? 0
@@ -144,21 +143,21 @@ export function ParadaScreen({ onBackToMap }: ParadaScreenProps) {
               className={`qa-mode-btn ${mode === 'real' ? 'active' : ''}`}
               onClick={() => setMode('real')}
             >
-              Hardware Real (ESP32)
+              Hardware Real
             </button>
             <button
               type="button"
               className={`qa-mode-btn ${mode === 'mock_connected' ? 'active-sim' : ''}`}
               onClick={() => setMode('mock_connected')}
             >
-              Falsa Conexión ESP32
+              Prueba / Falsa Conexión
             </button>
             <button
               type="button"
               className={`qa-mode-btn ${mode === 'mock_offline' ? 'active-err' : ''}`}
               onClick={() => setMode('mock_offline')}
             >
-              Falla Abrupta de Red
+              Simular desconexión
             </button>
           </div>
 
@@ -429,42 +428,6 @@ export function ParadaScreen({ onBackToMap }: ParadaScreenProps) {
               <strong className="param-v">{lastCommandAction ?? 'Ninguno'}</strong>
             </div>
           </div>
-
-          <button
-            type="button"
-            className="endpoints-toggle-btn"
-            onClick={() => setEndpointsOpen((prev) => !prev)}
-            aria-expanded={endpointsOpen}
-          >
-            <span>Endpoints para hardware de Lina (ESP32)</span>
-            <span>{endpointsOpen ? '▴' : '▾'}</span>
-          </button>
-
-          {endpointsOpen && (
-            <div className="endpoints-drawer">
-              <div>
-                <strong>MQTT ESP32 (TCP):</strong> <code>{PARADA_HARDWARE_CONFIG.brokerTcpUrl}</code>
-              </div>
-              <div>
-                <strong>MQTT WebApp (WSS):</strong> <code>{PARADA_HARDWARE_CONFIG.brokerWssUrl}</code>
-              </div>
-              <div>
-                <strong>Tópico Estado (ESP32 → App):</strong>{' '}
-                <code>{PARADA_HARDWARE_CONFIG.stateTopic}</code>
-              </div>
-              <div>
-                <strong>Tópico Comandos (App → ESP32):</strong>{' '}
-                <code>{PARADA_HARDWARE_CONFIG.commandTopic}</code>
-              </div>
-              <div>
-                <strong>Puente REST Local:</strong> <code>POST {PARADA_HARDWARE_CONFIG.restEstadoPath}</code>{' '}
-                / <code>GET {PARADA_HARDWARE_CONFIG.restComandosPath}</code>
-              </div>
-              <pre className="endpoints-json-sample">
-                {`{"stop_id":14,"lux":62,"night_mode":true,"button_pressed":false,"led_state":"COURTESY","seats_free":7,"occupancy_color":"GREEN"}`}
-              </pre>
-            </div>
-          )}
         </section>
 
         {/* Botones de acción reactivos a la conexión */}

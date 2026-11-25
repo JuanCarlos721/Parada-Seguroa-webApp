@@ -865,7 +865,7 @@
 
 .parada-header {
   position: relative;
-  z-index: 32;
+  z-index: 45;
   margin: 0 14px;
   padding: 8px 12px;
   border-radius: 18px;
@@ -977,7 +977,7 @@
 
 .qa-popover {
   position: relative;
-  z-index: 34;
+  z-index: 46;
   margin: 8px 14px 0 14px;
   padding: 10px 12px;
   border-radius: 18px;
@@ -1387,52 +1387,6 @@
   font-weight: 800;
   color: #0f172a;
   margin-top: 2px;
-}
-
-.endpoints-toggle-btn {
-  width: 100%;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #334155;
-  border-radius: 11px;
-  padding: 7px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-
-.endpoints-drawer {
-  background: #0f172a;
-  color: #e2e8f0;
-  border-radius: 12px;
-  padding: 10px;
-  font-size: 10.5px;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.endpoints-drawer code {
-  color: #6ee7b7;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 10px;
-  word-break: break-all;
-}
-
-.endpoints-json-sample {
-  margin: 4px 0 0 0;
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: #1e293b;
-  color: #fde68a;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 9.5px;
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .parada-actions-stack {
