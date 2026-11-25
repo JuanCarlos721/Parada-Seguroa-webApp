@@ -1,8 +1,9 @@
 /* Contenedor responsivo: pantalla completa en iPhone/PWA y vista móvil centrada en desktop */
 .app-viewport {
+  position: fixed;
+  inset: 0;
   width: 100%;
-  height: 100dvh;
-  min-height: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,7 +14,7 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  height: 100dvh;
+  height: 100%;
   background: #ffffff;
   overflow: hidden;
   display: flex;
@@ -40,7 +41,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: calc(78px + env(safe-area-inset-top, 0px));
+  height: calc(64px + env(safe-area-inset-top, 0px));
   z-index: 40;
   pointer-events: none;
   overflow: hidden;
@@ -362,10 +363,16 @@
 /* Barra superior flotante en Liquid Glass */
 .floating-route-bar-wrap {
   position: absolute;
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  top: calc(env(safe-area-inset-top, 0px) + 2px);
   left: 14px;
   right: 14px;
   z-index: 45;
+}
+
+@media (min-width: 500px) and (min-height: 760px) {
+  .floating-route-bar-wrap {
+    top: 12px;
+  }
 }
 
 .floating-route-bar {
@@ -426,7 +433,7 @@
   flex-shrink: 0;
 }
 
-/* Half Sheet en Liquid Glass */
+/* Half Sheet arrastrable en Liquid Glass */
 .half-sheet {
   position: absolute;
   left: 0;
@@ -435,17 +442,18 @@
   z-index: 25;
   height: auto;
   max-height: 62%;
-  background: rgba(255, 255, 255, 0.68);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border-top: 1.5px solid rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(26px) saturate(210%);
+  -webkit-backdrop-filter: blur(26px) saturate(210%);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.9);
   border-radius: 28px 28px 0 0;
-  padding: 8px 16px calc(82px + max(0px, env(safe-area-inset-bottom, 0px) - 12px)) 16px;
+  padding: 6px 16px calc(76px + max(0px, env(safe-area-inset-bottom, 0px) - 18px)) 16px;
   display: flex;
   flex-direction: column;
   gap: 7px;
-  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.92);
-  transition: height 280ms cubic-bezier(0.22, 1, 0.36, 1),
+  box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.94);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 280ms cubic-bezier(0.22, 1, 0.36, 1),
     max-height 280ms cubic-bezier(0.22, 1, 0.36, 1);
   overflow-y: auto;
   scrollbar-width: none;
@@ -455,26 +463,77 @@
   display: none;
 }
 
+.half-sheet.dragging {
+  transition: none;
+}
+
 .half-sheet.expanded {
   height: 78%;
   max-height: 82%;
 }
 
-.sheet-handle-btn {
-  align-self: center;
-  background: transparent;
-  border: none;
-  padding: 3px 20px;
-  cursor: pointer;
+.half-sheet.collapsed {
+  transform: translateY(calc(100% - 106px - max(0px, env(safe-area-inset-bottom, 0px) - 18px)));
+  overflow: hidden;
+}
+
+.half-sheet.collapsed > :not(.sheet-grab-zone) {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.sheet-grab-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 4px 28px 2px 28px;
+  cursor: grab;
+  touch-action: none;
   flex-shrink: 0;
+  user-select: none;
+}
+
+.sheet-grab-zone:active {
+  cursor: grabbing;
 }
 
 .sheet-handle-bar {
   display: block;
-  width: 38px;
+  width: 40px;
   height: 4px;
   border-radius: 999px;
-  background: #cbd5e1;
+  background: rgba(100, 116, 139, 0.45);
+}
+
+.sheet-minimize-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 20px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  color: #475569;
+  font-size: 13px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sheet-collapsed-peek {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: -0.01em;
 }
 
 /* Campo de texto en Half Sheet (Liquid Glass) */
@@ -798,26 +857,26 @@
   position: absolute;
   left: 14px;
   right: 14px;
-  bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) - 12px));
-  height: 62px;
+  bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) - 18px));
+  height: 60px;
   z-index: 35;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.42) 0%,
-    rgba(255, 255, 255, 0.22) 52%,
-    rgba(248, 250, 252, 0.34) 100%
+    rgba(255, 255, 255, 0.30) 0%,
+    rgba(255, 255, 255, 0.14) 55%,
+    rgba(255, 255, 255, 0.24) 100%
   );
-  backdrop-filter: blur(26px) saturate(220%) contrast(1.04) brightness(1.06);
-  -webkit-backdrop-filter: blur(26px) saturate(220%) contrast(1.04) brightness(1.06);
-  border: 1px solid rgba(255, 255, 255, 0.76);
-  border-radius: 31px;
+  backdrop-filter: blur(22px) saturate(240%) contrast(1.06) brightness(1.06);
+  -webkit-backdrop-filter: blur(22px) saturate(240%) contrast(1.06) brightness(1.06);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 30px;
   box-shadow:
-    0 12px 32px rgba(15, 23, 42, 0.14),
-    0 2px 8px rgba(15, 23, 42, 0.06),
+    0 10px 30px rgba(15, 23, 42, 0.16),
+    0 0 0 0.5px rgba(15, 23, 42, 0.08),
     inset 0 1.5px 1px rgba(255, 255, 255, 0.96),
-    inset 0 -1px 2px rgba(255, 255, 255, 0.45),
-    inset 1px 0 1px rgba(255, 255, 255, 0.55),
-    inset -1px 0 1px rgba(255, 255, 255, 0.55);
+    inset 0 -1px 2px rgba(255, 255, 255, 0.42),
+    inset 1px 0 1px rgba(255, 255, 255, 0.52),
+    inset -1px 0 1px rgba(255, 255, 255, 0.52);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -826,7 +885,7 @@
 
 .tab-btn {
   flex: 1;
-  height: 48px;
+  height: 46px;
   border: 1px solid transparent;
   background: transparent;
   display: flex;
@@ -835,17 +894,17 @@
   justify-content: center;
   gap: 3px;
   cursor: pointer;
-  border-radius: 24px;
+  border-radius: 23px;
   transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .tab-btn.active {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.62) 0%,
-    rgba(219, 234, 254, 0.38) 100%
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(219, 234, 254, 0.30) 100%
   );
-  border-color: rgba(255, 255, 255, 0.88);
+  border-color: rgba(255, 255, 255, 0.86);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.96),
     0 3px 10px rgba(0, 122, 255, 0.14);
@@ -933,7 +992,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 2px);
+}
+
+@media (min-width: 500px) and (min-height: 760px) {
+  .parada-screen {
+    padding-top: 12px;
+  }
 }
 
 .parada-header {

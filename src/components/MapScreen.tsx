@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type PointerEvent } from 'react'
 import iconSearch from '../assets/icon-search.svg'
 import { useParadaApp } from '../context/ParadaAppContext'
 import { CITY_PROFILES } from '../data/cityProfiles'
 import { useSimulatedUnits, type SimulatedUnit } from '../hooks/useSimulatedUnits'
 import { LiveMapCanvas } from './LiveMapCanvas'
+
+type SheetDetent = 'collapsed' | 'half' | 'expanded'
 
 export function MapScreen() {
   const {
@@ -16,9 +18,13 @@ export function MapScreen() {
   const [sheetQuery, setSheetQuery] = useState('')
   const [activeChip, setActiveChip] = useState('all')
   const [selectedUnitId, setSelectedUnitId] = useState(profile.units[1]?.id ?? profile.units[0].id)
-  const [isSheetExpanded, setIsSheetExpanded] = useState(false)
+  const [sheetDetent, setSheetDetent] = useState<SheetDetent>('half')
+  const [dragDeltaY, setDragDeltaY] = useState(0)
+  const [isDraggingSheet, setIsDraggingSheet] = useState(false)
   const [stopRequested, setStopRequested] = useState(false)
   const [recenterSignal, setRecenterSignal] = useState(0)
+  const dragStartYRef = useRef<number | null>(null)
+  const didDragMoveRef = useRef(false)
 
   // Sincroniza textos y selección cuando cambia la ciudad activa
   useEffect(() => {
@@ -44,6 +50,47 @@ export function MapScreen() {
 
   const highlightedUnit: SimulatedUnit =
     simulatedUnits.find((u) => u.id === selectedUnitId) ?? simulatedUnits[0]
+
+  const handleSheetPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    dragStartYRef.current = e.clientY
+    didDragMoveRef.current = false
+    setIsDraggingSheet(true)
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  const handleSheetPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (dragStartYRef.current === null) return
+    const rawDelta = e.clientY - dragStartYRef.current
+    if (Math.abs(rawDelta) > 6) {
+      didDragMoveRef.current = true
+    }
+    const clamped = Math.max(-220, Math.min(340, rawDelta))
+    setDragDeltaY(clamped)
+  }
+
+  const finishSheetGesture = () => {
+    if (dragStartYRef.current === null) return
+    const delta = dragDeltaY
+    const wasDrag = didDragMoveRef.current
+    dragStartYRef.current = null
+    setIsDraggingSheet(false)
+    setDragDeltaY(0)
+
+    if (!wasDrag) {
+      setSheetDetent((prev) => (prev === 'collapsed' ? 'half' : prev === 'half' ? 'expanded' : 'half'))
+      return
+    }
+
+    if (delta >= 42) {
+      setSheetDetent((prev) =>
+        prev === 'expanded' ? (delta > 180 ? 'collapsed' : 'half') : 'collapsed',
+      )
+    } else if (delta <= -42) {
+      setSheetDetent((prev) =>
+        prev === 'collapsed' ? (delta < -180 ? 'expanded' : 'half') : 'expanded',
+      )
+    }
+  }
 
   return (
     <main className="map-screen">
@@ -121,19 +168,43 @@ export function MapScreen() {
         />
       </div>
 
-      {/* Half Sheet en Liquid Glass */}
+      {/* Half Sheet arrastrable en Liquid Glass (collapsed / half / expanded) */}
       <section
-        className={`half-sheet ${isSheetExpanded ? 'expanded' : ''}`}
+        className={`half-sheet ${sheetDetent} ${isDraggingSheet ? 'dragging' : ''}`}
+        style={
+          isDraggingSheet && dragDeltaY !== 0
+            ? { transform: `translateY(${dragDeltaY}px)` }
+            : undefined
+        }
         aria-label="Panel de unidades próximas"
       >
-        <button
-          type="button"
-          className="sheet-handle-btn"
-          onClick={() => setIsSheetExpanded((prev) => !prev)}
-          aria-label={isSheetExpanded ? 'Contraer panel' : 'Expandir panel'}
+        <div
+          className="sheet-grab-zone"
+          onPointerDown={handleSheetPointerDown}
+          onPointerMove={handleSheetPointerMove}
+          onPointerUp={finishSheetGesture}
+          onPointerCancel={finishSheetGesture}
         >
           <span className="sheet-handle-bar" />
-        </button>
+          {sheetDetent === 'collapsed' ? (
+            <div className="sheet-collapsed-peek">
+              <span>
+                ↑ {profile.stopName} · {filteredUnits.length} unidades
+              </span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="sheet-minimize-btn"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => setSheetDetent('collapsed')}
+              aria-label="Minimizar panel abajo"
+              title="Minimizar panel"
+            >
+              ⌄
+            </button>
+          )}
+        </div>
 
         {/* Campo de texto interactivo dentro del Half Sheet */}
         <div className="sheet-search-field">
